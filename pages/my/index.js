@@ -74,11 +74,43 @@ Page({
     return info;
   },
 
-  onLogin(e) {
-    wx.navigateTo({
-      url: '/pages/login/login',
+  onLogin() {
+    wx.getUserProfile({
+      desc: '用于完善用户信息',
+      success: async (res) => {
+        const { userInfo } = res;
+        this.setData({
+          isLoad: true,
+          personalInfo: {
+            name: userInfo.nickName,
+            image: userInfo.avatarUrl,
+            city: userInfo.city || '未设置',
+            star: '普通用户',
+          },
+        });
+  
+        // ⚠️ 发送到后端换取 access_token
+        const result = await request('/api/login', {
+          method: 'POST',
+          data: {
+            nickname: userInfo.nickName,
+            avatar: userInfo.avatarUrl,
+          },
+        });
+  
+        if (result.data.success) {
+          wx.setStorageSync('access_token', result.data.token);
+          this.showToast('登录成功');
+        } else {
+          this.showToast('登录失败');
+        }
+      },
+      fail: () => {
+        this.showToast('用户拒绝授权');
+      },
     });
   },
+  
 
   onNavigateTo() {
     wx.navigateTo({ url: `/pages/my/info-edit/index` });

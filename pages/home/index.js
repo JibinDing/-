@@ -8,6 +8,9 @@ Page({
   data: {
     enable: false,
     swiperList: [],
+    secondHandList: [],
+    subletList: [],
+    activityList: [],
     cardInfo: [],
     currentCity: '伦敦', // 默认城市
     // 发布
@@ -24,13 +27,17 @@ Page({
       request('/home/cards').then((res) => res.data),
       request('/home/swipers').then((res) => res.data),
     ]);
-
+  
+    const allCards = cardRes.data;
+  
     this.setData({
       cardInfo: cardRes.data,
-      focusCardInfo: cardRes.data.slice(0, 3),
+      secondHandList: allCards.slice(1, 2),
+      subletList: allCards.slice(2, 3),
+      activityList: allCards.slice(3, 4),
       swiperList: swiperRes.data,
     });
-  },
+  }  ,
   onLoad(option) {
     const systemInfo = wx.getSystemInfoSync();
     const statusBarHeight = systemInfo.statusBarHeight;
