@@ -14,6 +14,15 @@
       focus
     ></t-search>
   </view>
+  <view class="search-selectors">
+  <picker mode="selector" value="{{categoryIndex}}" range="{{categoryList}}" bindchange="onCategoryChange">
+    <view class="selector-box">分类：{{categoryList[categoryIndex]}}</view>
+  </picker>
+  <picker mode="selector" value="{{cityIndex}}" range="{{cityList}}" bindchange="onCityChange">
+    <view class="selector-box">城市：{{cityList[cityIndex]}}</view>
+  </picker>
+</view>
+
   <view class="search-wrap">
     <view class="history-wrap">
       <view class="search-header">
@@ -31,23 +40,6 @@
           wx:key="*this"
         >
           <t-tag class="history-item margin-12" max-width="{{343}}" variant="light">{{item}}</t-tag>
-        </view>
-      </view>
-    </view>
-    <view class="popular-wrap">
-      <view class="search-header">
-        <text class="search-title">搜索发现</text>
-      </view>
-      <view class="search-content">
-        <view
-          class="search-item"
-          hover-class="hover-history-item"
-          wx:for="{{popularWords}}"
-          bind:tap="handlePopularTap"
-          data-index="{{index}}"
-          wx:key="*this"
-        >
-          <t-tag class="popular-item margin-12" max-width="{{343}}" variant="light" icon="search"> {{item}} </t-tag>
         </view>
       </view>
     </view>

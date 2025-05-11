@@ -5,6 +5,10 @@ Page({
     historyWords: [],
     popularWords: [],
     searchValue: '',
+    categoryList: ['全部', '二手', '转租', '组局'],
+    categoryIndex: 0,
+    cityList: ['全部', '伦敦', '纽约', '悉尼', '多伦多'],
+    cityIndex: 0,
     dialog: {
       title: '确认删除当前历史记录',
       showCancelButton: true,
@@ -20,6 +24,18 @@ Page({
     this.queryHistory();
     this.queryPopular();
   },
+
+  onCategoryChange(e) {
+    this.setData({
+      categoryIndex: e.detail.value,
+    });
+  },
+  
+  onCityChange(e) {
+    this.setData({
+      cityIndex: e.detail.value,
+    });
+  },  
 
   /**
    * 查询历史记录
@@ -162,11 +178,19 @@ Page({
    * @returns {Promise<void>}
    */
   handleSubmit(e) {
-    const { value } = e.detail;
-    if (value.length === 0) return;
-
-    this.setHistoryWords(value);
+    const keyword = e.detail.value.trim();
+    if (keyword.length === 0) return;
+  
+    const category = this.data.categoryList[this.data.categoryIndex];
+    const city = this.data.cityList[this.data.cityIndex];
+  
+    this.setHistoryWords(keyword);
+  
+    wx.navigateTo({
+      url: `/pages/searchResult/index?category=${category}&city=${city}&keyword=${keyword}`,
+    });
   },
+  
 
   /**
    * 点击取消回到主页

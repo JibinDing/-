@@ -92,3 +92,19 @@
 .search-page .search-item .history-item {
   background: #e7e7e7;
 }
+
+.search-selectors {
+    display: flex;
+    gap: 20rpx;
+    padding: 20rpx;
+    margin-bottom: 20rpx;
+  }
+  
+  .selector-box {
+    flex: 1;
+    padding: 20rpx;
+    border: 1rpx solid #ccc;
+    border-radius: 8rpx;
+    background-color: #f7f7f7;
+  }
+  
