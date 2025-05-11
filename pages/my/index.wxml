@@ -42,23 +42,11 @@
     </t-grid>
   </view>
 
-  <view class="my-service">
-    <view class="my-service--tips">推荐服务</view>
-    <t-grid column="{{4}}" class="my-service__list">
-      <t-grid-item
-        class="my-service__list-item"
-        wx:for="{{service}}"
-        wx:key="item"
-        text="{{item.name}}"
-        image="{{item.image}}"
-        url="{{item.url}}"
-        data-data="{{item}}"
-        bindclick="onEleClick"
-      />
-    </t-grid>
-  </view>
+ 
+
 
   <t-cell-group theme="card">
+    <t-cell title="高校邮箱认证" leftIcon="email" hover bindclick="onVerifyEmail" />
     <t-cell
       wx:for="{{settingList}}"
       wx:for-item="item"
@@ -72,4 +60,35 @@
       bindclick="onEleClick"
     />
   </t-cell-group>
+
 </view>
+
+<t-dialog
+  visible="{{emailDialogVisible}}"
+  title="高校邮箱认证"
+  confirmBtn="提交"
+  cancelBtn="取消"
+  showCancelBtn
+  bind:confirm="onSubmitEmail"
+  bind:cancel="onCancelEmail"
+>
+  <view class="dialog-body">
+    <input
+      placeholder="请输入高校邮箱地址"
+      value="{{email}}"
+      bindinput="onInputEmail"
+      class="input"
+    />
+    <view class="verify-row">
+      <input
+        placeholder="请输入验证码"
+        value="{{code}}"
+        bindinput="onInputCode"
+        class="input verify-code-input"
+      />
+      <button size="mini" bindtap="onSendCode" disabled="{{sendDisabled}}">
+        {{sendText}}
+      </button>
+    </view>
+  </view>
+</t-dialog>

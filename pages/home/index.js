@@ -32,6 +32,12 @@ Page({
     });
   },
   onLoad(option) {
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight;
+  
+    this.setData({
+      statusBarHeight: statusBarHeight,
+    });
     if (wx.getUserProfile) {
       this.setData({
         canIUseGetUserProfile: true,
@@ -96,5 +102,10 @@ Page({
       },
     });
   },
+  onTapSearch() {
+    wx.navigateTo({
+      url: '/pages/search/index',
+    });
+  }
   
 });

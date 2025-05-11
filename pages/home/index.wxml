@@ -1,4 +1,4 @@
-<view class="custom-nav-bar">
+<view class="custom-nav-bar" style="padding-top: {{statusBarHeight}}px;">
   <!-- 左侧城市选择 -->
   <view class="city-selector" bindtap="onSelectCity">
     <text>{{currentCity}}</text>
@@ -6,9 +6,10 @@
   </view>
 
   <!-- 中间搜索框 -->
-  <view class="search-bar">
-    <input class="search-input" placeholder="请搜索你想要的内容" />
-  </view>
+  <view class="search-bar" bindtap="onTapSearch">
+  <text class="search-placeholder">请搜索你想要的内容</text>
+</view>
+
 
   <!-- 右侧保留空位（可选添加按钮或设置图标） -->
   <view class="nav-right-space"></view>

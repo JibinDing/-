@@ -8,6 +8,11 @@ Page({
     isLoad: false,
     service: [],
     personalInfo: {},
+    emailDialogVisible: false,
+    email: '',
+    code: '',
+    sendDisabled: false,
+    sendText: '发送验证码',
     gridList: [
       {
         name: '全部发布',
@@ -84,4 +89,82 @@ Page({
     if (url) return;
     this.onShowToast('#t-toast', name);
   },
+//以下为邮箱验证模块
+  onVerifyEmail() {
+    this.setData({
+      emailDialogVisible: true,
+    });
+  },
+  
+  onCancelEmail() {
+    this.setData({
+      emailDialogVisible: false,
+      email: '',
+      code: '',
+    });
+  },
+  
+  onInputEmail(e) {
+    this.setData({
+      email: e.detail.value,
+    });
+  },
+  
+  onInputCode(e) {
+    this.setData({
+      code: e.detail.value,
+    });
+  },
+  
+  onSendCode() {
+    const email = this.data.email.trim();
+    const ukPattern = /^[a-zA-Z0-9._%+-]+@.+\.ac\.uk$/;
+    const usPattern = /^[a-zA-Z0-9._%+-]+@.+\.edu$/;
+    const caPattern = /^[a-zA-Z0-9._%+-]+@.+(\.edu|\.ca)$/;
+    const auPattern = /^[a-zA-Z0-9._%+-]+@.+\.edu\.au$/;
+  
+    if (!(ukPattern.test(email) || usPattern.test(email) || caPattern.test(email) || auPattern.test(email))) {
+      this.showToast('邮箱后缀不符合高校认证规则');
+      return;
+    }
+  
+    this.setData({ sendDisabled: true, sendText: '已发送' });
+  
+    // TODO: 调用后端发送验证码接口
+    request('/api/sendCode', { method: 'POST', data: { email } }).then(() => {
+      this.showToast('验证码已发送');
+      setTimeout(() => {
+        this.setData({ sendDisabled: false, sendText: '重新发送' });
+      }, 60000); // 60秒冷却
+    });
+  },
+  
+  onSubmitEmail() {
+    const { email, code } = this.data;
+    if (!email || !code) {
+      this.showToast('请填写完整信息');
+      return;
+    }
+  
+    // TODO: 调用后端验证接口
+    request('/api/verifyCode', { method: 'POST', data: { email, code } }).then((res) => {
+      if (res.data.success) {
+        this.showToast('认证成功');
+        this.setData({
+          emailDialogVisible: false,
+          personalInfo: { ...this.data.personalInfo, verified: true, email },
+        });
+      } else {
+        this.showToast('验证码错误');
+      }
+    });
+  },
+  
+  showToast(msg) {
+    this.selectComponent('#t-toast').show({
+      duration: 2000,
+      message: msg,
+    });
+  }
+  
 });
